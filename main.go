@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"time"
 )
 
 func main() { 
@@ -15,6 +16,8 @@ func main() {
 	}
 
 	for _, c := range contests {
-		fmt.Printf("%s (ID: %d)\n", c.Name, c.ID)
+		t := time.Unix(c.StartTimeSeconds, 0)
+		// fmt.Printf("%s (ID: %d)\n", c.Name, c.ID)
+		fmt.Printf("- %s\n When: %s\n\n", c.Name, t.Format(time.RFC1123))
 	}
 }
