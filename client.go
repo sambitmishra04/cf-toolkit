@@ -19,5 +19,13 @@ func getContests() ([]Contest, error) {
 		return nil, err
 	}
 
-	return apiResp.Result, nil
+	var upcoming [] Contest
+
+	for _, contest := range apiResp.Result {
+		if contest.Phase == "BEFORE"  {
+			upcoming = append(upcoming, contest)
+		} 
+	}
+
+	return upcoming, nil
 }
