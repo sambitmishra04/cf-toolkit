@@ -9,3 +9,7 @@ Thumbs.db
 # IDEs
 .vscode/
 .idea/
+
+# Secrets
+secret.txt
+credentials.json
