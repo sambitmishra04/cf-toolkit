@@ -1,23 +1,23 @@
 package main
 
 import (
-	"io"
-	"log"
 	"net/http"
+	"encoding/json"
 )
 
-func getContests() string {
+func getContests() ([]Contest, error) {
 	resp, err := http.Get("https://codeforces.com/api/contest.list?gym=false")
 	if err != nil {
-		log.Fatal("Error fetching data:", err)
+		return nil, err
 	}
 
 	defer resp.Body.Close()
 
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatal("Error reading response:", err)
+	var apiResp ApiResponse
+
+	if err := json.NewDecoder(resp.Body).Decode(&apiResp); err != nil {
+		return nil, err
 	}
 
-	return string(body)
+	return apiResp.Result, nil
 }
