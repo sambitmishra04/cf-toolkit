@@ -4,43 +4,45 @@ import (
 	"fmt"
 	"log"
 	"time"
+
+	"google.golang.org/api/calendar/v3"
 )
 
 func main() { 
 
 	initDB()
-	// fmt.Println("Hello, Codeforces Toolkit!")
-	fmt.Println("Fetching contests...")
-	contests, err := getContests()
 
+	fmt.Println("Initializing Google Calendar...")
+    srv := getCalendarService()
+    fmt.Println("Success! Authenticated.")
+
+	runSync(srv)
+
+	ticker := time.NewTicker(24 * time.Hour)
+	fmt.Println("Worker started. Checking every 24 hours...")
+
+	for range ticker.C {
+		runSync(srv)
+	}
+}
+func runSync(srv *calendar.Service) {
+	fmt.Println("Checking for new contests...")
+	contests, err := getContests()
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Error fetching contests: %v", err)
+		return
 	}
 
-	
-	fmt.Println("\nInitializing Google Calendar...")
-	srv := getCalendarService()
-	fmt.Println("Success! Authenticated with Google Calendar.")
-	
-	// fmt.Printf("Service: %v\n", srv)
-
 	for _, c := range contests {
-
 		if eventExists(c.ID) {
 			fmt.Printf("Skipping %s (already added)\n", c.Name)
 			continue
 		}
+
 		t := time.Unix(c.StartTimeSeconds, 0)
-		// fmt.Printf("%s (ID: %d)\n", c.Name, c.ID)
 		fmt.Printf("- Adding %s\n  When: %s\n", c.Name, t.Format(time.RFC1123))
 
-		// fmt.Printf("- %s\n When: %s\n\n", c.Name, t.Format(time.RFC1123))
-
 		addContestToCalendar(srv, c)
-		// fmt.Println("Test mode: Added 1 event and stopping.")
-		// break
-
 		saveEvent(c.ID)
-
 	}
 }
