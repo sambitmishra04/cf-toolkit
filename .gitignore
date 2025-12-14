@@ -13,3 +13,4 @@ Thumbs.db
 # Secrets
 secret.txt
 credentials.json
+token.json

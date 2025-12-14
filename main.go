@@ -20,4 +20,10 @@ func main() {
 		// fmt.Printf("%s (ID: %d)\n", c.Name, c.ID)
 		fmt.Printf("- %s\n When: %s\n\n", c.Name, t.Format(time.RFC1123))
 	}
+
+	fmt.Println("\nInitializing Google Calendar...")
+	srv := getCalendarService()
+	fmt.Println("Success! Authenticated with Google Calendar.")
+
+	fmt.Printf("Service: %v\n", srv)
 }
