@@ -13,8 +13,8 @@ func addContestToCalendar(srv *calendar.Service, contest Contest) {
 	end := start.Add(time.Duration(contest.DurationSeconds) * time.Second)
 
 	event := &calendar.Event{
-		Summary: contest.Name,
-		Location: "Codeforces",
+		Summary:     contest.Name,
+		Location:    "Codeforces",
 		Description: fmt.Sprintf("https://codeforces.com/contest/%d", contest.ID),
 		Start: &calendar.EventDateTime{
 			DateTime: start.Format(time.RFC3339),
@@ -22,8 +22,14 @@ func addContestToCalendar(srv *calendar.Service, contest Contest) {
 		End: &calendar.EventDateTime{
 			DateTime: end.Format(time.RFC3339),
 		},
+		Reminders: &calendar.EventReminders{
+			UseDefault: false,
+			Overrides: []*calendar.EventReminder{
+				{Method: "popup", Minutes: 10},
+			},
+		},
 	}
-	
+
 	_, err := srv.Events.Insert("primary", event).Do()
 	if err != nil {
 		log.Printf("Unable to create event for %s: %v", contest.Name, err)
@@ -31,5 +37,4 @@ func addContestToCalendar(srv *calendar.Service, contest Contest) {
 	}
 
 	fmt.Printf("Created event: %s\n", contest.Name)
-
 }
