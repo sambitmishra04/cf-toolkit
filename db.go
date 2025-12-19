@@ -3,13 +3,20 @@ package main
 import (
 	"database/sql"
 	"log"
+	"os"
+	"fmt"
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
 var db *sql.DB
 
 func initDB() {
-	connStr := "postgres://cfuser:cfpassword@localhost:5432/cf_toolkit?sslmode=disable"
+	host := "localhost"
+	if os.Getenv("DB_HOST") != "" {
+		host = os.Getenv("DB_HOST")
+	}
+
+	connStr := fmt.Sprintf("postgres://cfuser:cfpassword@%s:5432/cf_toolkit?sslmode=disable", host)
 	
 	var err error
 	db, err = sql.Open("pgx", connStr)

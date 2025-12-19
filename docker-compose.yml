@@ -1,6 +1,17 @@
 version: '3.8'
 
 services:
+  app:
+    build: .
+    container_name: cf-toolkit-app
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+    volumes:
+      - ./token.json:/root/token.json
+    restart: always
+
   db:
     image: postgres:15-alpine
     container_name: cf-postgres
