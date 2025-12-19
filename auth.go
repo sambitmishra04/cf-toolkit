@@ -14,22 +14,40 @@ import (
 	"google.golang.org/api/option"
 )
 
-// 1. ENTRY POINT: Reads credentials and gets the Calendar Service
-func getCalendarService() *calendar.Service {
-	ctx := context.Background()
-	b, err := os.ReadFile("credentials.json")
-	if err != nil {
-		log.Fatalf("Unable to read client secret file: %v", err)
+var googleConfig *oauth2.Config
+
+func initOAuth() {
+	var b []byte
+	var err error
+
+	if envCreds := os.Getenv("GOOGLE_CREDENTIALS_JSON"); envCreds != "" {
+		b = []byte(envCreds)
+	} else {
+		b, err = os.ReadFile("credentials.json")
+		if err != nil {
+			log.Fatalf("Unable to read client secret file: %v", err)
+		}
 	}
 
 	// If modifying these scopes, delete your previously saved token.json.
-	config, err := google.ConfigFromJSON(b, calendar.CalendarEventsScope)
-	if err != nil {
-		log.Fatalf("Unable to parse client secret file to config: %v", err)
+	var errConfig error
+	googleConfig, errConfig = google.ConfigFromJSON(b, calendar.CalendarEventsScope, "https://www.googleapis.com/auth/userinfo.email")
+	if errConfig != nil {
+		log.Fatalf("Unable to parse client secret file to config: %v", errConfig)
 	}
-	
+	googleConfig.RedirectURL = "http://localhost:8080/auth/callback"
+}
+
+// 1. ENTRY POINT: Reads credentials and gets the Calendar Service
+func getCalendarService() *calendar.Service {
+	ctx := context.Background()
+
+	if googleConfig == nil {
+		initOAuth()
+	}
+
 	// Get a client (either from a saved file or by logging in)
-	client := getClient(config)
+	client := getClient(googleConfig)
 
 	srv, err := calendar.NewService(ctx, option.WithHTTPClient(client))
 	if err != nil {
