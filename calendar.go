@@ -7,18 +7,6 @@ import (
 
 	"google.golang.org/api/calendar/v3"
 )
-
-func addContestToCalendar(srv *calendar.Service, contest Contest) {
-	start := time.Unix(contest.StartTimeSeconds, 0)
-	end := start.Add(time.Duration(contest.DurationSeconds) * time.Second)
-
-	event := &calendar.Event{
-		Summary:     contest.Name,
-		Location:    "Codeforces",
-		Description: fmt.Sprintf("https://codeforces.com/contest/%d", contest.ID),
-		Start: &calendar.EventDateTime{
-			DateTime: start.Format(time.RFC3339),
-		},
 		End: &calendar.EventDateTime{
 			DateTime: end.Format(time.RFC3339),
 		},
