@@ -28,6 +28,7 @@ func addContestToCalendar(srv *calendar.Service, contest Contest) {
 			Overrides: []*calendar.EventReminder{
 				{Method: "popup", Minutes: 10},
 			},
+			ForceSendFields: []string{"UseDefault"},
 		},
 	}
 
