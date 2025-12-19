@@ -35,7 +35,12 @@ func initOAuth() {
 	if errConfig != nil {
 		log.Fatalf("Unable to parse client secret file to config: %v", errConfig)
 	}
-	googleConfig.RedirectURL = "http://localhost:8080/auth/callback"
+
+	if url := os.Getenv("GOOGLE_REDIRECT_URL"); url != "" {
+		googleConfig.RedirectURL = url
+	} else {
+		googleConfig.RedirectURL = "http://localhost:8080/auth/callback"
+	}
 }
 
 // 1. ENTRY POINT: Reads credentials and gets the Calendar Service
