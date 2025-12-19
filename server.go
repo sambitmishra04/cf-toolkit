@@ -13,7 +13,7 @@ func startServer() {
 	r := gin.Default()
 
 	r.GET("/", func(c *gin.Context) {
-		authURL := googleConfig.AuthCodeURL("state-token", oauth2.AccessTypeOffline)
+		authURL := googleConfig.AuthCodeURL("state-token", oauth2.AccessTypeOffline, oauth2.SetAuthURLParam("prompt", "consent"))
 		html := `<h1>Codeforces Calendar Sync</h1>
                  <p>Sync upcoming contests to your Google Calendar automatically.</p>
                  <a href="` + authURL + `">Login with Google</a>`
