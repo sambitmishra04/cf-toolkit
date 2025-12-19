@@ -15,21 +15,6 @@ func startServer() {
 	r.GET("/", func(c *gin.Context) {
 		html := `<h1>Codeforces Calendar Sync</h1>
                  <p>Sync upcoming contests to your Google Calendar automatically.</p>
-                 <a href="/auth/login">Login with Google</a>`
-		c.Data(200, "text/html; charset=utf-8", []byte(html))
-	})
-
-	r.GET("/auth/login", func(c *gin.Context) {
-		if googleConfig == nil {
-			initOAuth()
-		}
-		url := googleConfig.AuthCodeURL("state-token", oauth2.AccessTypeOffline)
-		c.Redirect(http.StatusTemporaryRedirect, url)
-	})
-
-	r.GET("/auth/callback", func(c *gin.Context) {
-		code := c.Query("code")
-		if code == "" {
 			c.String(http.StatusBadRequest, "Code not found")
 			return
 		}
