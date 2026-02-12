@@ -7,7 +7,7 @@ A Go-based tool that automatically syncs upcoming Codeforces contests to your Go
 - Filters for future events only.
 - Authenticates with Google Calendar via OAuth2.
 - Prevents duplicates using a Postgres database.
-- Runs automatically every 24 hours (Dockerized).
+- Runs automatically every 24 hours (Dockerized)
 
 ## How to Run
 
