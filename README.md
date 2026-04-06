@@ -9,8 +9,14 @@ A Go-based tool that automatically syncs upcoming Codeforces contests to your Go
 - Prevents duplicates using a Postgres database.
 - Runs automatically every 24 hours (Dockerized)
 
-## How to Run
+## How to Use
+1. visit cf-toolkit.onrender.com
+2. wait for render application to load
+3. login with your gmail account
+4. proceed with allow unverified app
+5. give all permissions
 
+## How to build
 ### Option 1: Docker (Recommended)
 1.  **Prerequisites**: Docker Desktop installed.
 2.  **Setup**:
