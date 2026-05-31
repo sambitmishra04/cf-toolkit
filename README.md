@@ -15,6 +15,7 @@ A Go-based tool that automatically syncs upcoming Codeforces contests to your Go
 3. login with your gmail account
 4. proceed with allow unverified app
 5. give all permissions
+6. wait for calendar to update
 
 ## How to build
 ### Option 1: Docker (Recommended)
